@@ -1,2 +1,2 @@
 # tensorflow-quarterback-projection
-This is the Stanford CS229 final project classifying quarterbacks as NFL-ready or busts.
+This is a neural network classifying quarterbacks as NFL-ready or busts based on college data and the teams that draft them.
