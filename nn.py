@@ -3,11 +3,12 @@
 import argparse
 import numpy as np
 import pandas as pd
+from sklearn.metrics import classification_report
 import tensorflow as tf
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--batch_size', default=10, type=int, help='batch size')
-parser.add_argument('--train_steps', default=4000, type=int,
+parser.add_argument('--train_steps', default=10000, type=int,
                     help='number of training steps')
 
 if tf.gfile.Exists("results"):
@@ -16,7 +17,7 @@ tf.gfile.MakeDirs("results")
 
 
 TRAIN_FILENAME = "dataset/quarterback_training.csv"
-TEST_FILENAME = "dataset/quarterback_test.csv"
+DEV_FILENAME = "dataset/quarterback_dev.csv"
 
 CSV_COLUMN_NAMES = ['DraftYear',
                     'Round',
@@ -38,7 +39,7 @@ CSV_COLUMN_NAMES = ['DraftYear',
                     'Heisman',
                     'Verdict'
                     ]
-DEL_FEATURE = ['Player']
+DEL_FEATURE = ['Player', 'College', 'Conference', 'Team']
 DATA_TYPES = {'DraftYear': np.int32,
               'Round': np.int32,
               'Pick': np.int32,
@@ -64,17 +65,21 @@ VERDICTS = [
             'NFL-Ready'
             ]
 
-
 def load_data(y_name='Verdict'):
     train = pd.read_csv(TRAIN_FILENAME, names=CSV_COLUMN_NAMES, header=0,
       dtype=DATA_TYPES)
     train_x, train_y = train, train.pop(y_name)
 
-    test = pd.read_csv(TEST_FILENAME, names=CSV_COLUMN_NAMES, header=0,
+    dev = pd.read_csv(DEV_FILENAME, names=CSV_COLUMN_NAMES, header=0,
       dtype=DATA_TYPES)
-    test_x, test_y = test, test.pop(y_name)
-    return (train_x, train_y), (test_x, test_y)
+    dev_x, dev_y = dev, dev.pop(y_name)
+    return (train_x, train_y), (dev_x, dev_y)
 
+def load_test_data(filename, y_name='Verdict'):
+    train = pd.read_csv(filename, names=CSV_COLUMN_NAMES, header=0,
+      dtype=DATA_TYPES)
+    train_x, train_y = train, train.pop(y_name)
+    return train_x, train_y
 
 def train_input_fn(features, labels, batch_size):
     """An input function for training"""
@@ -121,14 +126,15 @@ def main(argv):
     args = parser.parse_args(argv[1:])
 
     # Fetch the data
-    (train_x, train_y), (test_x, test_y) = load_data()
+    (train_x, train_y), (dev_x, dev_y) = load_data()
     train_x = dict(train_x)
-    test_x = dict(test_x)
+    dev_x = dict(dev_x)
 
     # Feature columns describe how to use the input.
     my_feature_columns = []
     for key in train_x.keys():
         if key in DEL_FEATURE:
+            print "Skipping feature %s" % key
             continue
         if key == "College":
           categorical_column = tf.feature_column.categorical_column_with_vocabulary_file(
@@ -161,92 +167,57 @@ def main(argv):
     classifier = tf.estimator.DNNClassifier(
         feature_columns=my_feature_columns,
         # Two hidden layers of 10 nodes each.
-        hidden_units=[50, 100, 50],
+        hidden_units=[],
         # The model must choose between 2 classes.
         n_classes=2,
         model_dir="results")
 
-    for _ in range(10):
+    # for _ in range(1):
       # Train the Model.
-      classifier.train(
-          input_fn=lambda:train_input_fn(train_x, train_y, args.batch_size),
-          steps=args.train_steps)
+    classifier.train(
+        input_fn=lambda:train_input_fn(train_x, train_y, args.batch_size),
+        steps=args.train_steps)
+
+    # Evaluate the model.
+    eval_result = classifier.evaluate(
+        input_fn=lambda:eval_input_fn(train_x, train_y, args.batch_size))
+
+    print('\nTrain set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
 
       # Evaluate the model.
-      eval_result = classifier.evaluate(
-          input_fn=lambda:eval_input_fn(train_x, train_y, args.batch_size))
+    eval_result = classifier.evaluate(
+        input_fn=lambda:eval_input_fn(dev_x, dev_y, args.batch_size))
 
-      print('\nTrain set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
-      # Evaluate the model.
-      eval_result = classifier.evaluate(
-          input_fn=lambda:eval_input_fn(test_x, test_y, args.batch_size))
+    print('\nDev set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
 
-    print('\nTest set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
+    predict_x, predict_y = load_test_data(DEV_FILENAME)
+    predict_x = predict_x.to_dict('list')
+    print predict_x.keys()
+    player_array = predict_x["Player"]
+    expected = predict_y.tolist()
 
-    # Generate predictions from the model
-    test_players = [
-                    'Marcus Mariota',
-                    'B.J. Daniels',
-                    'Eli Manning',
-                    'Drew Brees',
-                    'Sage Rosenfels',
-                    'Michael Vick',
-                    'Donovan McNabb',
-                    'Akili Smith',
-                    'Tom Brandstater',
-                    'Curtis Painter',
-                    'JaMarcus Russell',
-                    'Jared Goff',
-                    'Dak Prescott',
-                    'Christian Hackenberg'
-                  ]
-    expected = [
-                'NFL-Ready',
-                'Bust',
-                'NFL-Ready',
-                'NFL-Ready',
-                'Bust',
-                'NFL-Ready',
-                'NFL-Ready',
-                'Bust',
-                'Bust',
-                'Bust',
-                'Bust',
-                'NFL-Ready',
-                'NFL-Ready',
-                'Bust'
-                ]
-    predict_x = {
-                  'DraftYear': [2015, 2013, 2004, 2001, 2001, 2001, 1999, 1999, 2009, 2009, 2007, 2016, 2016, 2016],
-                  'Round': [1, 7, 1, 2, 4, 1, 1, 1, 6, 6, 1, 1, 4, 2],
-                  'Pick': [2, 237, 1, 32, 109, 1, 2, 3, 174, 201, 1, 1, 135, 51],
-                  'Age': [21, 23, 23, 22, 23, 21, 22, 24, 24, 24, 22, 21, 22, 21],
-                  'GamesPlayed': [41, 47, 43, 45, 30, 22, 45, 23, 45, 46, 36, 37, 49, 38],
-                  'Completions': [779, 649, 829, 1026, 306, 192, 548, 323, 584, 987, 493, 977, 734, 693],
-                  'Attempts': [1167, 1132, 1363, 1678, 587, 343, 938, 571, 989, 1648, 797, 1568, 1169, 1235],
-                  'Yards': [10796, 8433, 10119, 11792, 4164, 3299, 8389, 5148, 6857, 11163, 6625, 12195, 9376, 8457],
-                  'Touchdowns': [105, 52, 81, 90, 18, 21, 77, 45, 47, 67, 52, 96, 70, 48],
-                  'Interceptions': [14, 39, 35, 45, 26, 11, 26, 15, 32, 46, 21, 30, 23, 31],
-                  'RushAttempts': [337, 526, 128, 252, 164, 235, 465, 171, 132, 225, 139, 170, 536, 208],
-                  'RushYards': [2237, 2068, -135, 900, 660, 1299, 1561, 367, 152, 348, 79, -114, 2521, -242],
-                  'RushTouchdowns': [29, 5, 5, 14, 14, 13, 19, 6, 8, 13, 4, 1, 41, 6],
-                  'Player': test_players,
-                  'College': ['Oregon', 'South Florida', 'Mississippi', 'Purdue', 'Iowa St.', 'Virginia Tech', 'Syracuse', 'Oregon', 'Fresno St.', 'Purdue', 'LSU', 'California', 'Mississippi St.', 'Penn St.'],
-                  'Conference': ['Pac-12', 'Southeastern', 'Southeastern', 'Big Ten', 'Big 12', 'Atlantic Coast', 'Atlantic Coast', 'Pac-12', 'Mountain West', 'Big Ten', 'Southeastern', 'Pac-12', 'Southeastern', 'Big Ten'],
-                  'Team': ['TEN', 'SFO', 'SDG', 'SDG', 'WAS', 'ATL', 'PHI', 'CIN', 'DEN', 'IND', 'OAK', 'STL', 'DAL', 'NYJ'],
-                  'Heisman': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                  'Verdict': [1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0]
-                }
 
     predictions = classifier.predict(
         input_fn=lambda:eval_input_fn(predict_x, batch_size=args.batch_size))
+    prediction_array = []
+
     for i, (pred_dict, expec) in enumerate(zip(predictions, expected)):
-        player = test_players[i]
+        player = player_array[i]
         template = ('\nPrediction is "{}" for {} ({:.1f}%), who was actually a "{}."')
 
         class_id = pred_dict['class_ids'][0]
         probability = pred_dict['probabilities'][class_id]
-        print(template.format(VERDICTS[class_id], player, 100 * probability, expec))
+        print(template.format(VERDICTS[class_id], player, 100 * probability, VERDICTS[expec]))
+        prediction_array.append(class_id)
+
+    print expected
+    print prediction_array
+    a = tf.confusion_matrix(expected, prediction_array)
+    sess = tf.Session()
+    print(sess.run(a))
+    print classification_report(expected, prediction_array, target_names=['Bust', 'NFL-Ready'])
+
+
 
 
 if __name__ == '__main__':
