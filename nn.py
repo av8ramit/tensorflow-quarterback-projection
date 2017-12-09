@@ -191,24 +191,29 @@ def main(argv):
         ),
         # The model must choose between 2 classes.
         n_classes=2,
-        model_dir="final")
+        model_dir="results")
 
-    #for i in range(10):
+
     # Train the Model.
-    # classifier.train(
-    #     input_fn=lambda:train_input_fn(train_x, train_y, args.batch_size),
-    #     steps=args.train_steps)
+    classifier.train(
+        input_fn=lambda:train_input_fn(train_x, train_y, args.batch_size),
+        steps=args.train_steps)
+
+    # Evaluate the model.
+    # eval_result = classifier.evaluate(
+    #     input_fn=lambda:eval_input_fn(train_x, train_y, args.batch_size))
+    # print('\nTraining set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
 
     # Evaluate the model.
     eval_result = classifier.evaluate(
-        input_fn=lambda:eval_input_fn(train_x, train_y, args.batch_size))
-    print('\nTraining set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
+        input_fn=lambda:eval_input_fn(dev_x, dev_y, args.batch_size))
+    print('\nDev set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
 
     # eval_result = classifier.evaluate(
     #     input_fn=lambda:eval_input_fn(dev_x, dev_y, args.batch_size))
     # print('\nDev set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
 
-    predict_x, predict_y = load_test_data(TEST_FILENAME)
+    predict_x, predict_y = load_test_data(DEV_FILENAME)
     predict_x = predict_x.to_dict('list')
     player_array = predict_x["Player"]
     expected = predict_y.tolist()
