@@ -1,19 +1,9 @@
 DraftYear,Round,Pick,Age,GamesPlayed,Completions,Attempts,Yards,Touchdowns,Interceptions,RushAttempts,RushYards,RushTouchdowns,Player,College,Conference,Team,Heisman,Verdict
-2014,1,3,22,37,585,891,7598,56,19,195,561,15,Blake Bortles,Central Florida,American Athletic,JAX,0,1
-2014,1,22,21,26,595,863,7820,63,22,345,2169,30,Johnny Manziel,Texas A&M,Southeastern,CLE,1,0
-2014,1,32,21,39,781,1142,9817,72,24,226,170,6,Teddy Bridgewater,Louisville,Atlantic Coast,MIN,0,1
-2014,2,36,23,44,1087,1630,12843,113,24,164,190,5,Derek Carr,Fresno St.,Mountain West,OAK,0,1
-2014,2,62,22,45,1047,1668,13156,118,51,260,-67,8,Jimmy Garoppolo,East. Illinois,FCS,NWE,0,0
-2014,4,120,23,47,693,1248,9003,52,39,495,1359,24,Logan Thomas,Virginia Tech,Atlantic Coast,ARI,0,0
-2014,4,135,24,31,430,757,5690,37,19,167,-319,4,Tom Savage,Pittsburgh,Atlantic Coast,HOU,0,0
-2014,5,164,24,53,686,1026,9019,77,15,119,-50,3,A.J. McCarron,Alabama,Southeastern,CIN,0,0
-2014,6,178,23,30,407,659,5783,35,15,83,-313,0,Zach Mettenberger,LSU,Southeastern,TEN,0,0
 2013,1,16,23,43,600,897,7741,47,28,298,827,11,EJ Manuel,Florida St.,Atlantic Coast,BUF,0,0
 2013,2,39,22,44,988,1465,11662,98,21,245,342,4,Geno Smith,West Virginia,Big 12,NYJ,0,0
 2013,3,73,23,36,646,1069,7411,63,31,111,-281,3,Mike Glennon,North Carolina St.,Atlantic Coast,TAM,0,0
 2013,4,98,23,47,1001,1562,12327,116,48,132,-113,6,Matt Barkley,USC,Pac-12,PHI,0,0
 2013,4,110,23,47,791,1312,9190,70,28,242,168,5,Ryan Nassib,Syracuse,Atlantic Coast,NYG,0,0
-2013,7,237,23,47,649,1132,8433,52,39,526,2068,5,B.J. Daniels,South Florida,American Athletic,SFO,0,0
 2013,7,249,23,42,898,1389,9465,51,40,153,-167,9,Sean Renfree,Duke,Atlantic Coast,ATL,0,0
 2012,1,1,23,38,713,1064,9430,82,22,163,957,7,Andrew Luck,Stanford,Pac-12,IND,0,1
 2012,1,2,22,41,800,1192,10366,78,17,528,2254,33,Robert Griffin,Baylor,Big 12,WAS,1,1
@@ -48,8 +38,6 @@ DraftYear,Round,Pick,Age,GamesPlayed,Completions,Attempts,Yards,Touchdowns,Inter
 2009,1,17,21,35,680,1151,8078,44,34,214,343,20,Josh Freeman,Kansas St.,Big 12,TAM,0,0
 2009,2,44,23,49,507,783,6049,56,23,684,4480,47,Pat White,West Virginia,West Virginia,MIA,0,0
 2009,4,101,24,40,45,815,5475,28,13,387,1750,11,Stephen McGee,Texas A&M,Southeastern,DAL,0,0
-2009,6,174,24,45,584,989,6857,47,32,132,152,8,Tom Brandstater,Fresno St.,Mountain West,DEN,0,0
-2009,6,201,24,46,987,1648,11163,67,46,225,348,13,Curtis Painter,Purdue,Big Ten,IND,0,0
 2008,1,3,23,43,807,1347,9313,56,37,168,58,11,Matt Ryan,Boston Col.,Atlantic Coast,ATL,0,1
 2008,1,18,23,29,596,942,7057,41,15,153,76,9,Joe Flacco,Delaware,FCS,BAL,0,1
 2008,2,56,23,44,780,1185,10775,71,24,172,44,9,Brian Brohm,Louisville,Atlantic Coast,GNB,0,0
@@ -58,7 +46,6 @@ DraftYear,Round,Pick,Age,GamesPlayed,Completions,Attempts,Yards,Touchdowns,Inter
 2008,5,156,23,40,444,695,5129,38,21,258,1208,12,Dennis Dixon,Oregon,Pac-12,PIT,0,0
 2008,5,160,22,41,724,1065,9699,113,15,307,1864,19,Josh Johnson,San Diego,FCS,TAM,0,0
 2008,7,209,23,41,245,437,3096,31,13,128,340,5,Matt Flynn,LSU,Southeastern,GNB,0,0
-2007,1,1,22,36,493,797,6625,52,21,139,79,4,JaMarcus Russell,LSU,Southeastern,OAK,0,0
 2007,1,22,22,49,929,1602,11762,95,39,254,182,6,Brady Quinn,Notre Dame,Independent,CLE,0,0
 2007,2,36,23,50,964,1565,12964,85,31,472,751,21,Kevin Kolb,Houston,American Athletic,PHI,0,0
 2007,2,40,26,43,885,1418,11021,79,34,267,38,9,John Beck,BYU,FCS,MIA,0,0
@@ -84,7 +71,6 @@ DraftYear,Round,Pick,Age,GamesPlayed,Completions,Attempts,Yards,Touchdowns,Inter
 2005,5,145,22,46,916,1567,10706,84,51,143,-285,6,Dan Orlovsky,Connecticut,FCS,DET,0,0
 2005,6,213,22,49,768,1515,11249,79,57,182,-533,8,Derek Anderson,Oregon St.,Pac-12,BAL,0,1
 2005,7,250,22,25,384,641,5234,39,21,365,1487,16,Ryan Fitzpatrick,Harvard,FCS,STL,0,1
-2004,1,1,23,43,829,1363,10119,81,35,128,-135,5,Eli Manning,Mississippi,Southeastern,SDG,0,1
 2004,1,4,22,47,1087,1710,13484,95,34,252,96,17,Philip Rivers,North Carolina St.,Atlantic Coast,NYG,0,1
 2004,1,11,22,38,854,1304,10829,84,34,269,246,7,Ben Roethlisberger,Miami (OH),Mid-American,PIT,0,1
 2004,1,22,23,38,570,987,6754,60,27,237,241,10,J.P. Losman,Tulane,American Athletic,BUF,0,0
@@ -114,12 +100,9 @@ DraftYear,Round,Pick,Age,GamesPlayed,Completions,Attempts,Yards,Touchdowns,Inter
 2002,4,117,24,25,286,478,4415,29,15,66,77,0,Rohan Davey,LSU,Southeastern,NWE,0,0
 2002,5,137,24,36,188,369,2973,25,11,127,317,6,Randy Fasani,Stanford,Pac-12,CAR,0,0
 2002,5,158,22,42,668,1229,8460,66,33,192,168,7,Kurt Kittner,Illinois,Big Ten,ATL,0,0
-2001,1,1,21,22,192,343,3299,21,11,235,1299,13,Michael Vick,Virginia Tech,Atlantic Coast,ATL,0,1
-2001,2,32,22,45,1026,1678,11792,90,45,252,900,14,Drew Brees,Purdue,Big Ten,SDG,0,1
 2001,2,53,23,29,483,853,6447,35,25,251,606,11,Quincy Carter,Georgia,Southeastern,DAL,0,1
 2001,2,59,22,42,418,761,5501,31,28,346,1374,20,Marques Tuiasosopo,Washington,Pac-12,OAK,0,0
 2001,4,106,29,36,650,1107,9839,79,32,110,-366,2,Chris Weinke,Florida St.,Atlantic Coast,CAR,1,0
-2001,4,109,23,30,306,587,4164,18,26,164,660,14,Sage Rosenfels,Iowa St.,Big 12,WAS,0,0
 2001,4,125,22,27,254,479,3755,31,17,67,-124,6,Jesse Palmer,Florida,Southeastern,NYG,0,0
 2001,5,149,22,34,482,974,6608,41,52,214,185,8,Mike McMahon,Rutgers,Big Ten,DET,0,0
 2001,5,155,24,22,149,282,2175,15,6,37,0,1,A.J. Feeley,Oregon,Pac-12,PHI,0,0
@@ -134,8 +117,6 @@ DraftYear,Round,Pick,Age,GamesPlayed,Completions,Attempts,Yards,Touchdowns,Inter
 2000,7,214,23,36,306,536,4820,34,21,272,957,13,Jarious Jackson,Notre Dame,Independent,DEN,0,0
 2000,7,234,23,43,629,1020,8882,65,39,501,1758,18,Joe Hamilton,Georgia Tech,Atlantic Coast,TAM,0,0
 1999,1,1,22,29,795,1184,8435,74,35,154,-275,4,Tim Couch,Kentucky,Southeastern,CLE,0,1
-1999,1,2,22,45,548,938,8389,77,26,465,1561,19,Donovan McNabb,Syracuse,Atlantic Coast,PHI,0,1
-1999,1,3,24,23,323,571,5148,45,15,171,367,6,Akili Smith,Oregon,Pac-12,CIN,0,0
 1999,1,11,22,33,721,1097,9341,72,32,371,1003,19,Daunte Culpepper,UCF,American Athletic,MIN,0,1
 1999,1,12,22,47,694,1250,10708,68,41,313,577,16,Cade McNown,UCLA,Pac-12,CHI,0,0
 1999,2,50,22,42,669,1201,8695,72,34,369,1158,20,Shaun King,Tulane,American Athletic,TAM,0,1

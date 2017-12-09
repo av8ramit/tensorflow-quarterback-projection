@@ -18,6 +18,7 @@ tf.gfile.MakeDirs("results")
 
 TRAIN_FILENAME = "dataset/quarterback_training.csv"
 DEV_FILENAME = "dataset/quarterback_dev.csv"
+TEST_FILENAME = "dataset/quarterback_test.csv"
 
 CSV_COLUMN_NAMES = ['DraftYear',
                     'Round',
@@ -39,7 +40,26 @@ CSV_COLUMN_NAMES = ['DraftYear',
                     'Heisman',
                     'Verdict'
                     ]
-DEL_FEATURE = ['Player', 'College', 'Conference', 'Team']
+DEL_FEATURE = [
+                #'DraftYear', 0.6
+                #'Round', 0.9
+                #'Pick', 0.4
+                'Age', #0.8
+                # 'GamesPlayed', 0.8
+                #'Completions', 0.7
+                #'Attempts', 0.5
+                #'Yards', 0.6
+                #'Touchdowns', 0.7
+                #'Interceptions', 0.6
+                #'RushAttempts', 0.5
+                #'RushYards', 0.5
+                #'RushTouchdowns', 0.8
+                'Player',
+                'College', #0.9
+                #'Conference', 0.7
+                #'Team', 0.8
+                #'Heisman', 0.7
+                ]
 DATA_TYPES = {'DraftYear': np.int32,
               'Round': np.int32,
               'Pick': np.int32,
@@ -95,7 +115,6 @@ def train_input_fn(features, labels, batch_size):
 
     # Return the read end of the pipeline.
     return dataset.make_one_shot_iterator().get_next()
-
 
 def eval_input_fn(features, labels=None, batch_size=None):
     """An input function for evaluation or prediction"""
@@ -163,36 +182,34 @@ def main(argv):
         else:
           my_feature_columns.append(tf.feature_column.numeric_column(key=key))
 
-    # Build 2 hidden layer DNN with 10, 10 units respectively.
     classifier = tf.estimator.DNNClassifier(
         feature_columns=my_feature_columns,
-        # Two hidden layers of 10 nodes each.
-        hidden_units=[],
+        hidden_units=[50, 100, 50],
+        optimizer=tf.train.ProximalAdagradOptimizer(
+              learning_rate=0.01,
+              l2_regularization_strength=0.0001
+        ),
         # The model must choose between 2 classes.
         n_classes=2,
-        model_dir="results")
+        model_dir="final")
 
-    # for _ in range(1):
-      # Train the Model.
-    classifier.train(
-        input_fn=lambda:train_input_fn(train_x, train_y, args.batch_size),
-        steps=args.train_steps)
+    #for i in range(10):
+    # Train the Model.
+    # classifier.train(
+    #     input_fn=lambda:train_input_fn(train_x, train_y, args.batch_size),
+    #     steps=args.train_steps)
 
     # Evaluate the model.
     eval_result = classifier.evaluate(
         input_fn=lambda:eval_input_fn(train_x, train_y, args.batch_size))
+    print('\nTraining set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
 
-    print('\nTrain set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
+    # eval_result = classifier.evaluate(
+    #     input_fn=lambda:eval_input_fn(dev_x, dev_y, args.batch_size))
+    # print('\nDev set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
 
-      # Evaluate the model.
-    eval_result = classifier.evaluate(
-        input_fn=lambda:eval_input_fn(dev_x, dev_y, args.batch_size))
-
-    print('\nDev set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
-
-    predict_x, predict_y = load_test_data(DEV_FILENAME)
+    predict_x, predict_y = load_test_data(TEST_FILENAME)
     predict_x = predict_x.to_dict('list')
-    print predict_x.keys()
     player_array = predict_x["Player"]
     expected = predict_y.tolist()
 
@@ -210,8 +227,6 @@ def main(argv):
         print(template.format(VERDICTS[class_id], player, 100 * probability, VERDICTS[expec]))
         prediction_array.append(class_id)
 
-    print expected
-    print prediction_array
     a = tf.confusion_matrix(expected, prediction_array)
     sess = tf.Session()
     print(sess.run(a))
